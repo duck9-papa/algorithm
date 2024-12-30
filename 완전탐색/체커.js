@@ -5,7 +5,6 @@
 
 // 첫째 줄에 수 N개를 출력한다. k번째 수는 적어도 k개의 체커가 같은 칸에 모이도록 체커를 이동해야 하는 최소 횟수이다.
 
-// 특정 지점에서 모일때가 최소 경우의수
 // x의 경우의 수 * y의 경우의 수를 각각 비교
 // 각각의 좌표
 // k개의 체커를 모으는 최소한의 경우의수들의 모음 배열 반환 (1번째, 2번째 ...n번째)
@@ -58,7 +57,7 @@ const Answer = N => {
 
   distances = distances.sort((a, b) => a.totalDistance - b.totalDistance);
 
-  const results = distances.map((i, index) => i.result);
+  const results = distances.map(i => i.result);
   let answerList = [];
   for (let i = 0; i < N.length; i++) {
     answerList.push(Math.min(...results.map(j => j[i])));
