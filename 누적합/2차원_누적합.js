@@ -16,11 +16,62 @@
 // 출력
 // 총 M줄에 걸쳐 (x1, y1)부터 (x2, y2)까지 합을 구해 출력한다.
 
-const Answer = list => {};
+const Answer = (size, list, locations) => {
+  let result = [];
 
-Answer([
-  [1, 2, 3, 4],
-  [2, 3, 4, 5],
-  [3, 4, 5, 6],
-  [4, 5, 6, 7],
-]);
+  let prefix = [];
+
+  for (let i = 0; i < size; i++) {
+    prefix.push([]);
+  }
+
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      // 윗칸의 누적합
+      const prefixTopValue = prefix[y - 1]?.[x] || 0;
+      // 왼쪽칸의 누적합
+      const prefixLeftValue = prefix[y]?.[x - 1] || 0;
+      // 교집합 부분
+      const intersectionValue = prefix[y - 1]?.[x - 1] || 0;
+      // 지점 좌표
+      const locationValue = list[y][x];
+
+      const prefixValue =
+        prefixTopValue + prefixLeftValue - intersectionValue + locationValue;
+
+      prefix[y][x] = prefixValue;
+    }
+  }
+
+  locations.forEach(i => {
+    const [x1, y1, x2, y2] = i;
+    // 끝 점 누적합
+    const endPrefix = prefix[y2 - 1]?.[x2 - 1];
+    // 윗 영역
+    const topArea = prefix[y1 - 2]?.[x2 - 1] || 0;
+    // 좌측 영역
+    const leftArea = prefix[y2 - 1]?.[x1 - 2] || 0;
+    // 교집합합
+    const intersectionArea = prefix[y1 - 2]?.[x1 - 2] || 0;
+
+    const value = endPrefix - topArea - leftArea + intersectionArea;
+    result.push(value);
+  });
+
+  console.log(result);
+};
+
+Answer(
+  4,
+  [
+    [1, 2, 3, 4],
+    [2, 3, 4, 5],
+    [3, 4, 5, 6],
+    [4, 5, 6, 7],
+  ],
+  [
+    [2, 2, 3, 4],
+    [3, 4, 3, 4],
+    [1, 1, 4, 4],
+  ]
+);
